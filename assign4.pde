@@ -176,8 +176,8 @@ void alienMaker() {
     int row = i / numInRow;
     int col = i % numInRow;
  
-    int x = ix + (spaceOfCol*col);
-    int y = iy + (spaceOfRow*row);
+    int row = int((float)i / (float)numInRow);
+    int col = int((float)i % (float)numInRow);
     aList[i]= new Alien(x,y);
   }
 }
