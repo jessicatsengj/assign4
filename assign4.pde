@@ -173,8 +173,7 @@ void alienMaker() {
   int spaceOfRow= 50;
   
   for(int i=0; i<total; i++){
-    int row = i / numInRow;
-    int col = i % numInRow;
+   
  
     int row = int((float)i / (float)numInRow);
     int col = int((float)i % (float)numInRow);
