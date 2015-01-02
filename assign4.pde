@@ -19,7 +19,7 @@ int bulletNum;           //Bullet Order Number
 /*--------Put Variables Here---------*/
 int countLaserFrame;
 int laserNum;
-
+int deadNum;
 
 
 
@@ -104,7 +104,10 @@ void draw() {
 
     countBulletFrame+=1;
     countLaserFrame+=1;
-
+ 
+    checkRubyDrop(200);
+    checkRubyCatch();
+    //checkWinLose();
 
     //for(int i=0; i<aList.length-1; i++){
     //if(aList[i]==alien.die){
@@ -173,9 +176,9 @@ void alienMaker() {
   int spaceOfRow= 50;
   
   for(int i=0; i<total; i++){
-
     int row = int((float)i / (float)numInRow);
     int col = int((float)i % (float)numInRow);
+ 
     int x = ix + (spaceOfCol*col);
     int y = iy + (spaceOfRow*row);
     aList[i]= new Alien(x,y);
@@ -280,21 +283,28 @@ void checkAlienDead() {
 
 /*---------Alien Drop Laser-----------------*/
 void alienShoot(int frame){
-  frameRate(50);
-  Alien alien = aList[int(random(53))] ;
-  for (int i=0; i<lList.length-1; i++) {
-    Laser laser = lList[i];
+   if(countLaserFrame > frame){
+    int j =int(random(53));    
+    Alien alien = aList[j];
+    if( alien != null && !alien.die ){
+       lList[laserNum] = new Laser(alien.aX,alien.aY);       
+    if (laserNum < lList.length-2) {
+        laserNum+=1;
+      } else {
+        laserNum = 0;
+      }
+     }
+    countLaserFrame = 0;     
+    }
+}
 
-   }     
-      if (alien!=null && !alien.die){     
-      lList[laserNum]= new Laser(alien.aX, alien.aY);
-  
- }
- if (laserNum<lList.length-1) {
-     laserNum+=1; 
-      }
-      }
-   
+
+
+
+
+
+
+
 
 
 /*---------Check Laser Hit Ship-------------*/
@@ -311,7 +321,17 @@ void checkShipHit() {
 }
 
 /*---------Check Win Lose------------------*/
-
+/*void checkWinLose(){
+  //win
+  if(deadNum >= 53){
+    status = GAME_WIN;
+  }
+  //lose when life = 0
+  if(ship.life <= 0){
+    status = GAME_LOSE;
+    }
+   checkAlienBut();
+}*/
 
 void winAnimate() {
   int x = int(random(128))+70;
@@ -343,10 +363,22 @@ void loseAnimate() {
 }
 
 /*---------Check Ruby Hit Ship-------------*/
-
+void checkRubyDrop(int upgrade){
+  if( point >= upgrade){
+    ruby.show = true;
+    ruby.display();
+    ruby.move();    
+  }
+}   
 
 /*---------Check Level Up------------------*/
-
+void checkRubyCatch(){
+  if(ship.posX - 7.5 <= ruby.pX && ruby.pX <= ship.posX + 7.5 && 
+     ship.posY - 7.5 <= ruby.pY && ruby.pY <= ship.posY + 8){
+       ship.upGrade = true;
+       ruby.show = false;
+  }
+}
 
 /*---------Print Text Function-------------*/
 
@@ -404,21 +436,29 @@ void statusCtrl() {
   if (key == ENTER) {
     switch(status) {
 
-    case GAME_START:
-      status = GAME_PLAYING;
-      break;
-   case GAME_PLAYING:
-      status = GAME_PAUSE;
-      break;
-   case GAME_PAUSE:
-      status = GAME_PLAYING;
-      break;  
     
       /*-----------add things here--------*/
-
+case GAME_START:
+      status = GAME_PLAYING;
+      break;
+    case GAME_PLAYING:
+      status = GAME_PAUSE;
+      break;
+    case GAME_PAUSE:
+      status = GAME_PLAYING;
+      break;
+    case GAME_WIN:    
+      status = GAME_PLAYING;
+      reset();      
+      break;
+    case GAME_LOSE:
+      reset();
+      status = GAME_PLAYING;            
+      break;
     }
   }
 }
+  
 
 void cheatKeys() {
 
@@ -441,6 +481,3 @@ void cheatKeys() {
     }
   }
 }
-
-
- 
