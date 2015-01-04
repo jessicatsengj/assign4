@@ -39,19 +39,21 @@ void printText(){
     fill(95,194,226);
     text("Press ENTER to Resume",width/2,280);
   }else if(status==GAME_WIN){
+    textAlign(CENTER);
     textSize(40);
     fill(95,194,226);
-    text("WINNER",width/3,300);
+    text("WINNER",width/2,height/2);
     textSize(20);
     fill(95,194,226);
-    text("SCORE:"+point,width/3,340);
+    text("SCORE:"+point,width/2,280);
   }else if(status==GAME_LOSE){
+    textAlign(CENTER);
     textSize(40);
     fill(95,194,226);
-    text("BOOOM",width/3,240);
+    text("BOOOM",width/2,height/2);
     textSize(20);
     fill(95,194,226);
-    text("You are dead!!",width/3,280);
+    text("You are dead!!",width/2,280);
   }
 }
 
